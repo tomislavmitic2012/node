@@ -1,0 +1,260 @@
+Chapter 1
+---------
+- JavaScript first shipped with Netscape 2.0 in September 1995
+- JavaScript became a successful client side scripting language
+- In 1996 Netscape submitted JavaScript for standardization to Ecma
+  International, the international standards organization
+- In June 1997 JavaScript became the standard ECMA-262
+- As the browser wars raged JavaScript underwent performance improvements
+  and was no longer considered a toy language
+- In 2009 Ryan Dahl created Node.js, a framework used to create highly
+  scalable servers for web applciations
+- Node.js is written in C++ and JavaScript
+- To drive Node, Dahl tapped into Google's V8 JavaScript engine (the engine
+  used in Google Chrome)
+- Using V8, developers can write full blown applicaiton in JavaScript
+- With the invention of Node.js, JavaScript finally became a bona fide
+  server-side language
+
+- The Node Execution Model
+- In addition to speed, Node brought an unconventional execution model
+  to the table
+- Node removes a layer of complexity by combining server and application
+  logic in one place
+- Some developers have criticized this model for eliminating the traditional separation of concerns
+  employed in the LAMP stack
+- This approach, however, gives Node an unprecedented flexibility as a server
+- Node also differs from many other servers in its use of concurrency
+- An apache server maintains a pool of threads for handling client connections
+- This apporach lacks scalability since threads are resource intensive
+- A busy server quickly consumes all of the available threads, as a result more threads are spawned
+- Threads are expensive to create and tear down
+- Node executes in a single thread
+- While this may seem like a bad idea, in practice it works well b/c of the way most server applications
+  work
+- Normally a server receives a client request, then performs some high-latency I/O operation such as a
+  file read or database query
+- During this time the server blocks, waiting for the I/O operation to complete
+- Instead of sitting idle, the server could be handling more requests or be doing other useful work
+- In traditional servers, it is acceptable for a thread to do nothing while blocking on an I/O operation
+- Node however has only one thread, and blocking it causes the entire server to hang
+- To mitigate this problem, Node uses nonblocking I/O exclusively
+- If Node needs to perform a database query, it simply issues the query and then processes something else
+- When the query finally returns, it triggers an asynchronsous callback function that is responsible for
+  processing the query's results
+- Node's nonblocking, asynchronous execution model provides extremely scalable server solutions with minimal
+  overhead
+
+- The Read-Eval-Print-Loop
+- Node provides an interactive shell, known as the Read-Eval-Print-Loop, or REPL
+- The REPL reads input from the user, evaluates the input as JavaScript code, prints the result, and then waits for
+  more input
+- The REPL is useful for debugging and for experimenting with snall snippets of JavaScript code
+- To start the REPL, lanuch Node with no command line arguments
+- You then see the REPL command prompt >
+- From the prompt, being e- The Read-Eval-Print-Loop
+- Node provides an interactive shell, known as the Read-Eval-Print-Loop, or REPL
+- The REPL reads input from the user, evaluates the input as JavaScript code, prints the result, and then waits for
+  more input
+- The REPL is useful for debugging and for experimenting with snall snippets of JavaScript code
+- To start the REPL, lanuch Node with no command line arguments
+- You then see the REPL command prompt >
+- From the prompt, being entering arbitrary JavaScript code
+- You can also enter multiline expressions into the REPL
+- The ... is used by the REPL to indicate a multiline expression in progress
+
+- REPL Features
+- The REPL has a number of feautures that increases usability, the most useful of which is the ability
+  to browse previously issued commands using the up and down arrow keys
+- To terminate any command and return to a blank prompt, type Control+C
+- Pressing Control+C twice form a blank line cuases the REPL to terminate
+- You can quite the REPL at any time by pressing Control+D
+- You can use the Tab key to see a list of possible completions to the current command
+- If there is only one possible option Node inserts it
+- The list includes keywords, functions, and variables
+- The REPL also provides a special variable, _ (uderscore) that always contains the result of the last expression
+
+- REPL Commands .help
+- The .help command displays all of the available REPL commands
+
+- .exit
+- The .exit command termiante the REPL
+- This is equivalent to Control+D
+
+- .break
+- The .break command is used to bail out of a multiline expression, is is useful if you make a mistake or
+  simply choose not to complete the expression
+
+- .save filename
+- The .save command saves the current REPL session to a file specified by filename
+- If the file doesn't exist, it is created, if the file does exist, the existing file is overwritten
+- REPL commands and output are not saved
+
+- .load filename
+- The .load command executes the JavaScript file specified in filename
+- the file is executed as if each line were typed directly into the REPL
+
+- .clear
+- Similar to .break, .clear can be used to termiante multiline expressions
+- .clear is also used to reset the REPL's context object
+
+- Executing Node Programs
+- Although the REPL environment is useful, it is seldom used in production systems
+- Instead, programs are written as one or more JavaScript files and then interpreted by Node
+- Node doesn't require you to specify the .js file extension
+- If the input file is not found and no file extension is provided, Node will try adding the extensions
+  .js, .json and .node
+- Node interprets .js files as JavaScript source code and files with .json as JavaScript Object Notation
+  (JSON)
+- Files with a .node extension are treated as compiled add-on modules
+- JSON is a plain text standard for data interchange
+
+Chapter 2
+---------
+- The Node Module System
+- As a developer you can solve many complex problem using the core Node functionality
+- However, Node has a large developer community and an abundance of third part modules
+- Keeping track of all of these modules is Node's package manager, npm
+- npm is a command line tool that since Node 0.6.3 comes bundled with the Node environment
+- What npm does very well is manage Node modules and their dependencies
+- You can browse all available packages at the registry's site, https://npmjs.org
+- In addition to each individual module, the site shows various rankings, including which modules are the most
+  popular and which are depended on the most
+- If you would rather get your hands dirty at the command line, you can search the registry using the npm search
+  command, which lets you search for packages based on one or more keywords
+
+- Installing Packages
+- In order to use a module you must install it on your machine
+- This is normally as simple are downloading a few JavaScript source files (some modules require downloading or
+  compiling binaries as well)
+- To install a package, type npm install followed by the package name
+- To install the latest version of a package type npm install <module name>
+- If you are not interested in installing the latest version of a package, you can specify a version number
+- Node follows a major.minor.patch versioning scheme
+- In order to install a module of a vertain version use npm install <module name>@1.0.0
+- The @ character is used to separate the package name from the version
+- Changes to the major version numebr can indicate that a module has changed in a non-backwards-compatible way (known
+  as a breaking change)
+- Even changes to the minor version can introduce breaking changes
+- Therefore you will want to install the latest patch of a certain release - a scenario that npm supports with
+  the x wildcard
+- The x wildcard can also be used in place of the major and minro versions
+- npm install <module name>@1.0.x
+- You can also select versions using relational version range descriptors
+- Relational version range descriptors select the most recent version that matches a given set of criteria
+- Relational Version Range Decriptors
+      =version			  Exactly mathes version
+      >version			  Greater than version
+      >= version		  Greater than or equal to version
+      <version			  Less than version
+      <=version			  Less than or equal to version
+      ~version			  Greater than or equal to version, but less than the next major version
+      *				  Newest version available
+      ""			  Newest version available
+      version_1 - version_2	  Greater than or equal to version_1, and less than or equal to version_2
+      range_1 || range_2	  Matches versions specified by either range_1 and range_2
+- npm install <module name>@'=1.1.0'
+  npm install <module name>@'>1.0.0'
+  npm install <module name>@'~1.1.0'
+  npm install <module name>@'*'
+  npm install <module name>@''
+  npm install <module name>@'>=1.0.0 <1.1.0'
+  npm install <module name>@'1.0.0 - 1.1.0'
+  npm install <module name>@'<=1.0.0 || >= 1.1.0'
+
+- Installing from URLs
+- In addition, npm allows packages to be installed directly from git URLs
+- The URLs must take a certain git format
+
+  git://github.com/user/project.git#commit-ish
+  git+ssh://user@hostname:project.git#commit-ish
+  git+ssh://user@hostname/project.git#commit-ish
+  git+http://user@hostname/project/blah.git#commit-ish
+  git+https://user@hostname/project/blah.git#commit-ish
+
+- commit-ish representa a tag, SHA, or branch that can be supplied as an argument to git checkout
+- Note, you don't need to understand git and GitHub to use Node
+- Most Node modules use the GitHub ecosystem for source control and bug tracking
+- It is highly advisable to become familiar with GitHub
+- Package can also be installed from tarball URLs
+
+  npm install https://github.com/user/project/tarball/master
+
+- Package Locations
+- When packages are installed they are saved somewhere on your local machine
+- Typically this is a subdirectory named node_modules within your current directory
+- To determine the location, use the command npm root
+- You can also view all the installed modules using the npm ls command
+- THe tree structure of npm ls indicates that a module depends on another module
+- Since npm is able to recognize these dependencies, it automatically install any required modules
+- You can also see the installed modules by browsing the node_modules subdirectory
+
+- Global Packages
+- Packages as described thus far are libraries that are included in your prograk
+- These are referred to as local packages, these must be install in every project that uses them
+- Another type of package known as a global package, needs to be only installed in one location
+- Although global packages typically do not include code libraries, they can
+- As a rule of thumb, global packages normally contain command line tools, which should be included in the PATH
+  environment variable
+- To install a package globally, simply issue npm install with the -g ot --global option
+- In fact you can process global packages by adding the -g option to most npm commands
+- To view all global packages installed issue the command npm ls -g
+- You can also also locate the global node_modules folder using the npm root -g command
+
+- Linking Packages
+- Using npm, you can create links to local packages
+- When you link to a package, it can be referenced as if it were a global package
+- This is especially useful if you are developing a module and you want another project to reference you local
+  copy of the module
+- Linking is also useful if you want to deploy your module without publishing it to the public npm registry
+- Package linking is a two step process
+- The first step, creating the link, is done by changing to the directory of the project you want to be linkable
+
+    cd foo-module
+    npm link
+
+- After executing the npm link command, verify that the link was created using the npm ls -g command
+- The second step in module linking, referencing the link, is very similar to package installation
+- First change to the directory of the project that will import the linked module, next issue another npm link
+  command
+- However this time you must also specify the linke module's name
+
+      cd bar-module
+      npm link foo-module
+
+- Unlinking packages
+- The process for removing linked modules is very similar to the process for creating them
+- To remove a linked module from an application, use the npm unlink command followed by the name of the module
+  to unlink
+
+      cd bar-module
+      npm unlink foo-module
+
+- Similarly to remoe a link from you system, change to the linked module's directory, and issue the npm unlink
+  command
+
+      cd foo-module
+      npm unlink
+
+- Updating Packages
+- Since any package that is actively developed eventually releases a new version, you copy will become outdated
+- To determine if you copy is out of date, run the npm outdated command in your project directory
+- You can check all local pakcages, or you can check individual packages by specifying their names, and you can
+  process global packages by specifying the -g option
+- To update any outdated local packages, use the npm updated command
+- Much like outdated, update works on all local packaged by default
+- Again you can target individual modules by specifying their names, you can also update global packages using
+  the -g option
+- You can update npm using the following command
+
+  npm update npm -g
+
+- Uninstalling packages
+- To remove packages, use either the npm uninstall or npm rm commands (the two commands can be used interchangeably)
+  and specify one or more packages to remove
+- You can also remove global packages by providing the -g option
+
+      npm rm <module name>
+      npm uninstall <module name>
+
+- The require() Function
